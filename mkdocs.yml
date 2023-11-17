@@ -1,0 +1,8 @@
+site_name: Motor CRC schema
+site_url: https://example.com/
+nav:
+  - Home: index.md
+  - About: about.md
+theme: dracula
+plugins:
+  - mermaid2

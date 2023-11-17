@@ -1,0 +1,130 @@
+---
+id: https://example.org/sfb1451/sfb1451-schema
+name: sfb1451-schema
+title: sfb1451-schema
+description: |-
+  A schema to describe sfb1451 datasets
+license: MIT
+see_also:
+  - https://rdm.sfb1451.de/data-catalog-submission/
+
+prefixes:
+  sfb1451_schema: https://example.org/sfb1451/sfb1451-schema/
+  linkml: https://w3id.org/linkml/
+  example: https://example.org/
+  schema: http://schema.org/
+  bibo: https://purl.org/ontology/bibo/
+default_prefix: sfb1451_schema
+default_range: string
+
+imports:
+  - linkml:types
+
+classes:
+
+  Dataset:
+    attributes:
+      name:
+        slot_uri: schema:name
+        required: true
+        description: >-
+          Identifies the dataset uniquely within the scope of a CRC
+          project, ie the respective project must not have two
+          different datasets of the same name. The name should be
+          suitable for a directory/folder name. Spaces and special
+          characters should be avoided.
+      title:
+        slot_uri: schema:title
+        required: true
+        description: >-
+          Title to be displayed on the catalog landing page for the
+          dataset. Language must be English.
+      description:
+        slot_uri: schema:description
+        required: true
+        description: >-
+          General description of the dataset. It may summarize its
+          purpose, scope, content, and potential applications. If a
+          long description need to be split into paragraphs, each
+          paragraph can be put into a dedicated column in this
+          row. Language must be English.
+      crc-project:
+        slot_uri: schema:ResearchProject
+        required: true
+        description: >-
+          One or more CRC project this dataset is attributed to
+          (typically the project responsible for acquisition). The
+          project is identified by its CRC project code (e.g.,
+          Z02). If multiple project have been involved, additional
+          project codes can be given in subsequent columns, one per
+          column.
+      version:
+        slot_uri: schema:version
+        required: true
+        description: >-
+          A label that identifies the version of the dataset the
+          catalog record is describing. If a dataset is unversioned,
+          it is acceptable to state latest. Otherwise any numerical
+          label (e.g., 1.2), or text label (e.g., GITSHA 7db210fb5)
+          can be provided here. The version should change when the
+          content of the dataset changes.
+      sample[organism]:
+        slot_uri: openminds:Species
+        required: true
+        description: >-
+          Classification of organism(s) associated with, or studied
+          for the dataset. One or more organisms can be given, one per
+          column.  Organisms must be identified by their ID in the
+          NCBI organismal taxonomy, which can be searched at
+          https://www.ebi.ac.uk/ols4/ontologies/ncbitaxon.  For
+          example, the identifier for human or homo sapiens is
+          NCBITaxon:9606. The column value should be NCBITaxon:9606 in
+          this case.
+      sample[organism-part]:
+        slot_uri: openminds:UBERONParcellation
+        required: true
+        description: >-
+          Classification of organism part(s) associated with, or
+          studied for the dataset. One or more organism parts can be
+          given, one per column.  Organism parts must be identified by
+          their ID in the Uber-anatomy ontology (UBERON), which can be
+          searched at https://www.ebi.ac.uk/ols4/ontologies/uberon.
+          For example, the identifier for upper limb segment is
+          UBERON:0008785. The column value should be UBERON:0008785 in
+          this case.  The identifier for the brain is UBERON:0000955,
+          but more precise definitions for individual brain structures
+          are available.
+      keywords:
+        slot_uri: schema:keywords
+        required: false
+        description: >-
+          Keywords describing the major topical themes of the
+          dataset. Any number of keywords can be given, one keyword
+          per column. Keyword aid the discoverability of a dataset.
+      license:
+        slot_uri: schema:license
+        required: false
+        description: >-
+          A license document (URL) that applies to the dataset and
+          defines the terms and conditions for use.
+      doi:
+        slot_uri: bibo:doi
+        required: false
+        description: >-
+          A DOI the dataset got assigned (e.g., from a data portal it
+          was published in). The DOI should preferably point to the
+          dataset version described in the catalog record.
+      homepage:
+        slot_uri: schema:mainEntityOfPage
+        required: false
+        description: >-
+          A URL the catalog should advertise as the primary source of
+          information/data on this dataset. This could be a dataset
+          page in a data portal.
+      last-updated:
+        required: false
+        description: >-
+          Date of the last modification of the described dataset
+          (version), for example a release date. Must be given in ISO
+          8601 format (i.e., YYYY-MM-DD).
+
