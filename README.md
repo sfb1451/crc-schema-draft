@@ -20,5 +20,5 @@ gen-doc -d docs src/schema.yaml
 Serve docs locally
 
 ```
-mkdoc serve
+mkdocs serve
 ```
