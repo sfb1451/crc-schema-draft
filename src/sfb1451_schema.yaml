@@ -23,6 +23,19 @@ imports:
 classes:
 
   Dataset:
+    slots:
+      - description
+
+    slot_usage:
+      description:
+        required: true
+        description: >-
+          General description of the dataset. It may summarize its
+          purpose, scope, content, and potential applications. If a
+          long description need to be split into paragraphs, each
+          paragraph can be put into a dedicated column in this
+          row. Language must be English.
+
     attributes:
       name:
         slot_uri: schema:name
@@ -39,15 +52,6 @@ classes:
         description: >-
           Title to be displayed on the catalog landing page for the
           dataset. Language must be English.
-      description:
-        slot_uri: schema:description
-        required: true
-        description: >-
-          General description of the dataset. It may summarize its
-          purpose, scope, content, and potential applications. If a
-          long description need to be split into paragraphs, each
-          paragraph can be put into a dedicated column in this
-          row. Language must be English.
       crc-project:
         slot_uri: schema:ResearchProject
         required: true
@@ -128,3 +132,8 @@ classes:
           (version), for example a release date. Must be given in ISO
           8601 format (i.e., YYYY-MM-DD).
 
+
+slots:
+  description:
+    slot_uri: schema:description
+    description: A description of the item.
