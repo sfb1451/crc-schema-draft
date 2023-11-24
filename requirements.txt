@@ -1,4 +1,4 @@
 linkml
 mkdocs
-mkdocs-dracula-theme
+mkdocs-material
 mkdocs-mermaid2-plugin
