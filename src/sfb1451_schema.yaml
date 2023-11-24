@@ -15,6 +15,8 @@ prefixes:
   bibo: https://purl.org/ontology/bibo/
   dcterms: https://purl.org/dc/terms/
   dpv: https://w3id.org/dpv#
+  nfo: https://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#
+  obo: https://purl.obolibrary.org/obo/
   openminds: https://openminds.ebrains.eu/controlledTerms/
   prov: http://www.w3.org/ns/prov#
 
@@ -29,24 +31,26 @@ classes:
   Dataset:
     description: >-
       Dataset generated within the CRC 1451
-    attributes:
+    slots:
+      - name
+      - title
+      - description
+      - doi
+    slot_usage:
       name:
-        slot_uri: schema:name
         required: true
         description: >-
           Identifies the dataset uniquely within the scope of a CRC
-          project, ie the respective project must not have two
+          project, i.e. the respective project must not have two
           different datasets of the same name. The name should be
           suitable for a directory/folder name. Spaces and special
           characters should be avoided.
       title:
-        slot_uri: schema:title
         required: true
         description: >-
           Title to be displayed on the catalog landing page for the
           dataset. Language must be English.
       description:
-        slot_uri: schema:description
         required: true
         description: >-
           General description of the dataset. It may summarize its
@@ -54,6 +58,14 @@ classes:
           long description need to be split into paragraphs, each
           paragraph can be put into a dedicated column in this
           row. Language must be English.
+      doi:
+        required: false
+        pattern: "https://doi.org/.*"
+        description: >-
+          A DOI the dataset got assigned (e.g., from a data portal it
+          was published in). The DOI should preferably point to the
+          dataset version described in the catalog record.
+    attributes:
       crc-project:
         slot_uri: schema:ResearchProject
         required: true
@@ -116,14 +128,6 @@ classes:
         description: >-
           A license document (URL) that applies to the dataset and
           defines the terms and conditions for use.
-      doi:
-        slot_uri: bibo:doi
-        required: false
-        pattern: "https://doi.org/.*"
-        description: >-
-          A DOI the dataset got assigned (e.g., from a data portal it
-          was published in). The DOI should preferably point to the
-          dataset version described in the catalog record.
       homepage:
         slot_uri: schema:mainEntityOfPage
         required: false
@@ -142,6 +146,7 @@ classes:
         slot_uri: dpv:hasDataController
         required: true
         multivalued: true
+        range: DataController
         description: >-
           One or more entities (natural persons or organizations) that
           are (legally) responsible for a dataset, and serve as an
@@ -154,6 +159,7 @@ classes:
         slot_uri: schema:author
         required: true
         multivalued: true
+        range: Author
         description: >-
           One or more entities (natural persons or organizations) that
           are considered authors of the dataset. These authors need
@@ -164,6 +170,7 @@ classes:
         slot_uri: schema:funding
         required: true
         multivalued: true
+        range: Funding
         description: >-
           One or more funding sources that are associated with the
           dataset and shall be credited on the dataset's catalog page.
@@ -171,6 +178,7 @@ classes:
         slot_uri: schema:citation
         required: false
         multivalued: true
+        range: Publication
         description: >-
           One or more publications which are associated with the
           dataset and shall be credited on the dataset's catalog page.
@@ -178,12 +186,229 @@ classes:
         slot_uri: dcterms:hasPart
         required: false
         multivalued: true
+        range: File
         description: >-
           One or more files that form the dataset.
       used-for:
         slot_uri: prov:hadUsage
         required: false
         multivalued: true
+        range: Usage
         description: >-
           One or more activities/projects that the dataset has been or
           is presently being used for.
+
+  DataController:
+    class_uri: dpv:DataController
+    description: >-
+      Entity (natural person or organization) that is (legally)
+      responsible for a dataset, and serves as an official contact
+      point regarding collaboration inquiries. For datasets involving
+      personal data (as defined in the European General Data
+      Protection Regulation; GDPR) thiese are the data
+      controllers. For CRC datasets, these are typically the PIs of
+      the involved CRC project(s).
+    slots:
+      - name
+      - email
+    slot_usage:
+      name:
+        required: true
+        description: >-
+          The full name of the responsible entity. For example, the
+          name of a CRC project PI.
+      email:
+        required: true
+        description: >-
+          An email address with which the entity can be contacted. For
+          example, the institutional email address of a CRC project
+          PI.
+    attributes:
+      type:
+        required: false
+        description: >-
+          The type of entity described in a column. Either Person, or
+          Organization.
+      address:
+        slot_uri: schema:address
+        required: false
+        description: >-
+          A (postal) address for the responsible entity.
+
+  Author:
+    class_uri: schema:Person
+    description: >-
+      Entity (natural person or organization) that is considered an
+      author of the dataset. Dataset authors need not be identical to
+      an author list of an associated publication. An entity listed as
+      dataset author will be credited on the catalog page of the
+      dataset.
+    slot_usage:
+      name:
+        required: true
+        description: >-
+          The full name of the author. For example, the name of a CRC
+          member.
+      email:
+        required: false
+        description: >-
+          An email address with which the author can be contacted.
+    attributes:
+      orcid:
+        slot_uri: obo:IAO_0000708
+        required: false
+        recommended: true
+        description: >-
+          ORCID of an author, to uniquely identify a researcher.
+      affiliation:
+        slot_uri: schema:affiliation
+        required: false
+        multivalued: true
+        description: >-
+          One or more names of organizations or institutions an author
+          is affiliated with. Affiliations are free-form.
+
+  Funding:
+    class_uri: schema:Grant
+    description: >-
+      Funding source associated with the dataset and shall be credited
+      on the dataset's catalog page.
+    attributes:
+      funder:
+        slot_uri: schema:funder
+        required: true
+        description: >-
+          Code or URL that identifiers the entity providing the
+          funding. For the for the required acknowledgment of the DFG
+          funding of the CRC1451 use the code DFG.
+      grant:
+        slot_uri: schema:identifier
+        required: true
+        description: >-
+          Grant identifier. This is typically a funder-specific
+          project code. For the required acknowledgment of the DFG
+          funding of the CRC1451 use the code
+          `431549029-<CRC-project-code>`.
+
+  Publication:
+    class_uri: schema:CreativeWork
+    description: >-
+      Publications which is associated with the dataset and shall be
+      credited on the dataset's catalog page.
+    slots:
+      - url
+      - doi
+    slot_usage:
+      url:
+        required: false
+        description: >-
+          A URL pointing to the publication. A corresponding link is
+          placed on the dataset page in the catalog. This need not
+          be given when a publication DOI is specified.
+      doi:
+        required: false
+        description: >-
+          A Digital Object Identifier (URL, starting with
+          https://doi.org/) for a publication. Enables publication DOI
+          display on a catalog page, persistently identifies the
+          publication, and enables metadata retrieval from
+          bibliographic databases.
+    attributes:
+      citation:
+        slot_uri: schema:citation
+        required: true
+        description: >-
+          Free-form citation for the publication. Enables publication
+          record display on catalog page. All citations in a metadata
+          record should use a common, and homogeneous format. Optional
+          when doi specified.
+      date:
+        slot_uri: schema:datePublished
+        required: false
+        description: >-
+          Date of publication. Enables publication date display on a
+          catalog page, and association of publication with the DFG
+          reporting timeframe. ISO 8601 format; year alone is
+          sufficient.
+
+  File:
+    class_uri: schema:DigitalDocument
+    description: >-
+      File which is part of a dataset.
+    attributes:
+      path[POSIX]:
+        slot_uri: schema:name
+        required: true
+        description: >-
+          Relative path (within the dataset) in POSIX/UNIX notation
+          (i.e. forward slashes). This enables display of a file tree
+          on the dataset catalog page. Tip: do not include a top-level
+          directory that matches the dataset name, because the files
+          are already understood as being in the dataset.
+      size[bytes]:
+        slot_uri: nfo:fileSize
+        required: false
+        range: integer
+        description: >-
+          File size in bytes. Enables (total) size information in the
+          catalog record and the file tree on the dataset catalog
+          page. Required for auto-generation of a DataLad dataset from
+          a catalog record.
+      checksum[md5]:
+        slot_uri: obo:NCIT_C171276
+        required: false
+        description: >-
+          MD5 checksum ("fingerprint") of the file. Enables
+          content/download verification. Required for auto-generation
+          of a DataLad dataset from a catalog record.
+      url:
+        slot_uri: schema:contentUrl
+        required: false
+        description: >-
+          File content URL, i.e. URL allowing (possibly
+          access-protected) download of that particular file (not
+          leading to e.g. a landing page). Enabled display of download
+          button on the dataset catalog page. Required for
+          auto-generation of a DataLad dataset from a catalog record.
+
+  Usage:
+    class_uri: prov:Activity
+    slots:
+      - title
+      - url
+      - description
+    slot_usage:
+      title:
+        required: true
+        description: >-
+          A title for the activity/project. This will be displayed on
+          the dataset page in the catalog.
+      url:
+        required: false
+        description: >-
+          A URL pointing to a web page representing the
+          activity/project, or providing information on it. A
+          corresponding link is shown on the dataset page in the
+          catalog.
+      description:
+        required: false
+        description: >-
+          A description of the activity/project, possibly focused on
+          the role/association of the dataset in it. If a long
+          description need to be split into paragraphs, each paragraph
+          can be put into a dedicated column. Language must be
+          English.
+
+slots:
+  name:
+    slot_uri: schema:name
+  title:
+    slot_uri: schema:title
+  description:
+    slot_uri: schema:description
+  doi:
+    slot_uri: bibo:doi
+  email:
+    slot_uri: schema:email
+  url:
+    slot_uri: schema:url
