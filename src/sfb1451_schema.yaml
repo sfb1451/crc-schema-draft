@@ -27,6 +27,8 @@ imports:
 classes:
 
   Dataset:
+    description: >-
+      Dataset generated within the CRC 1451
     attributes:
       name:
         slot_uri: schema:name
@@ -75,6 +77,7 @@ classes:
       sample[organism]:
         slot_uri: openminds:Species
         required: true
+        multivalued: true
         description: >-
           Classification of organism(s) associated with, or studied
           for the dataset. One or more organisms can be given, one per
@@ -87,6 +90,7 @@ classes:
       sample[organism-part]:
         slot_uri: openminds:UBERONParcellation
         required: true
+        multivalued: true
         description: >-
           Classification of organism part(s) associated with, or
           studied for the dataset. One or more organism parts can be
@@ -101,6 +105,7 @@ classes:
       keywords:
         slot_uri: schema:keywords
         required: false
+        multivalued: true
         description: >-
           Keywords describing the major topical themes of the
           dataset. Any number of keywords can be given, one keyword
@@ -114,6 +119,7 @@ classes:
       doi:
         slot_uri: bibo:doi
         required: false
+        pattern: "https://doi.org/.*"
         description: >-
           A DOI the dataset got assigned (e.g., from a data portal it
           was published in). The DOI should preferably point to the
@@ -135,6 +141,7 @@ classes:
       data-controller:
         slot_uri: dpv:hasDataController
         required: true
+        multivalued: true
         description: >-
           One or more entities (natural persons or organizations) that
           are (legally) responsible for a dataset, and serve as an
@@ -146,6 +153,7 @@ classes:
       author:
         slot_uri: schema:author
         required: true
+        multivalued: true
         description: >-
           One or more entities (natural persons or organizations) that
           are considered authors of the dataset. These authors need
@@ -155,23 +163,27 @@ classes:
       funding:
         slot_uri: schema:funding
         required: true
+        multivalued: true
         description: >-
           One or more funding sources that are associated with the
           dataset and shall be credited on the dataset's catalog page.
       publication:
         slot_uri: schema:citation
         required: false
+        multivalued: true
         description: >-
           One or more publications which are associated with the
           dataset and shall be credited on the dataset's catalog page.
       hasPart:
         slot_uri: dcterms:hasPart
         required: false
+        multivalued: true
         description: >-
           One or more files that form the dataset.
       used-for:
         slot_uri: prov:hadUsage
         required: false
+        multivalued: true
         description: >-
           One or more activities/projects that the dataset has been or
           is presently being used for.
