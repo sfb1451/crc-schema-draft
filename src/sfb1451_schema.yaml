@@ -11,9 +11,13 @@ see_also:
 prefixes:
   sfb1451_schema: https://example.org/sfb1451/sfb1451-schema/
   linkml: https://w3id.org/linkml/
-  example: https://example.org/
   schema: http://schema.org/
   bibo: https://purl.org/ontology/bibo/
+  dcterms: https://purl.org/dc/terms/
+  dpv: https://w3id.org/dpv#
+  openminds: https://openminds.ebrains.eu/controlledTerms/
+  prov: http://www.w3.org/ns/prov#
+
 default_prefix: sfb1451_schema
 default_range: string
 
@@ -122,9 +126,52 @@ classes:
           information/data on this dataset. This could be a dataset
           page in a data portal.
       last-updated:
+        slot_uri: schema:dateModified
         required: false
         description: >-
           Date of the last modification of the described dataset
           (version), for example a release date. Must be given in ISO
           8601 format (i.e., YYYY-MM-DD).
-
+      data-controller:
+        slot_uri: dpv:hasDataController
+        required: true
+        description: >-
+          One or more entities (natural persons or organizations) that
+          are (legally) responsible for a dataset, and serve as an
+          official contact point regarding collaboration
+          inquiries. For datasets involving personal data (as defined
+          in the European General Data Protection Regulation; GDPR)
+          these are data controllers. For CRC datasets, these are
+          typically the PIs of the involved CRC project(s).
+      author:
+        slot_uri: schema:author
+        required: true
+        description: >-
+          One or more entities (natural persons or organizations) that
+          are considered authors of the dataset. These authors need
+          not be identical to an author list of an associated
+          publication. Any entity listed in this table will be
+          credited on the catalog page of the dataset.
+      funding:
+        slot_uri: schema:funding
+        required: true
+        description: >-
+          One or more funding sources that are associated with the
+          dataset and shall be credited on the dataset's catalog page.
+      publication:
+        slot_uri: schema:citation
+        required: false
+        description: >-
+          One or more publications which are associated with the
+          dataset and shall be credited on the dataset's catalog page.
+      hasPart:
+        slot_uri: dcterms:hasPart
+        required: false
+        description: >-
+          One or more files that form the dataset.
+      used-for:
+        slot_uri: prov:hadUsage
+        required: false
+        description: >-
+          One or more activities/projects that the dataset has been or
+          is presently being used for.
