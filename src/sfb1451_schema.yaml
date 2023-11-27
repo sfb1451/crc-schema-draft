@@ -243,6 +243,9 @@ classes:
       an author list of an associated publication. An entity listed as
       dataset author will be credited on the catalog page of the
       dataset.
+    slots:
+      - name
+      - email
     slot_usage:
       name:
         required: true
