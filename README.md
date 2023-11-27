@@ -14,7 +14,7 @@ pip install -r requirements.txt
 Build docs:
 
 ```
-gen-doc -d docs src/sfb1451_schema.yaml
+gen-doc --template-directory templates -d docs src/sfb1451_schema.yaml
 ```
 
 Serve docs locally
